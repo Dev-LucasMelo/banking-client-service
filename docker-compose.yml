@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
 
-  client-service:
+  client_service:
     build:
       context: .
       dockerfile: Dockerfile
