@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+
+  client-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: client_service
+    ports:
+      - "5000:3000"
+    volumes:
+      - .:/app
+    networks:
+      - loomi_network
+    restart: unless-stopped
+    env_file:
+      - .env
+
+  postgres:
+    image: postgres:15
+    container_name: postgres_container_client_service
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: client_service_db
+      POSTGRES_USER: client
+      POSTGRES_PASSWORD: 12345678
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - loomi_network
+
+volumes:
+  pgdata:
+
+networks:
+  loomi_network:
+    external: true
