@@ -10,7 +10,11 @@ services:
     ports:
       - "5000:3000"
     volumes:
-      - .:/app
+      - ./src:/app/src
+      - ./prisma:/app/prisma
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
+      - ./tsconfig.json:/app/tsconfig.json
     networks:
       - loomi_network
     restart: unless-stopped
@@ -31,6 +35,20 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - loomi_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_client_service
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: lucas@admin.com
+      PGADMIN_DEFAULT_PASSWORD: 1234
+    ports:
+      - "5050:80"
+    networks:
+      - loomi_network
+    depends_on:
+      - postgres
 
 volumes:
   pgdata:
