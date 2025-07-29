@@ -24,7 +24,8 @@ model Cliente {
   criado_em     DateTime @default(now()) @map("criado_em")
   atualizado_em DateTime @updatedAt @map("atualizado_em")
 
-  Conta Conta? 
+  Conta      Conta?
+  Endereco Endereco?
 }
 
 model Conta {
@@ -37,8 +38,25 @@ model Conta {
   criado_em     DateTime @default(now()) @map("criado_em")
   atualizado_em DateTime @updatedAt @map("atualizado_em")
 
-  cliente_id    String   @unique @db.Uuid
-  cliente       Cliente  @relation(fields: [cliente_id], references: [id])
+  cliente_id String  @unique @db.Uuid
+  cliente    Cliente @relation(fields: [cliente_id], references: [id])
 
   @@map("conta")
+}
+
+model Endereco {
+  id            String   @id @default(uuid()) @db.Uuid
+  numero        String   @db.VarChar(10)
+  rua           String   @db.VarChar(40)
+  bairro        String   @db.VarChar(30)
+  cidade        String   @db.VarChar(20)
+  status        String   @db.VarChar(20)
+  cep           String   @db.VarChar(10)
+  criado_em     DateTime @default(now())
+  atualizado_em DateTime @updatedAt
+
+  cliente_id String  @unique @db.Uuid
+  cliente    Cliente @relation(fields: [cliente_id], references: [id])
+
+  @@map("endereco")
 }
