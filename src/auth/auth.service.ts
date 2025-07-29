@@ -16,7 +16,7 @@ export class AuthService {
     async login(data: loginDto) {
         try {
             const { email, password } = data
-            let client = await this.clientService.findUnique(email)
+            let client = await this.clientService.findUniqueByEmail(email)
 
             if (!client || !await bcrypt.compare(password, client.senha)) {
                 throw new BadRequestException('Credenciais invalidas')

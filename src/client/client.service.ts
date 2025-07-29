@@ -11,7 +11,7 @@ export class ClientService {
         private readonly repository: PrismaService
     ) { }
 
-    async findUnique(email: string) {
+    async findUniqueByEmail(email: string) {
         return await this.repository.cliente.findFirst({
             where: {
                 email: email
@@ -19,8 +19,19 @@ export class ClientService {
         })
     }
 
+    async findUniqueById(id: string) {
+        return await this.repository.cliente.findFirst({
+            where: {
+                id: id
+            },
+            include: {
+                Conta: true
+            }
+        })
+    }
+
     async create(data: registerDto) {
-        const user = await this.findUnique(data.email);
+        const user = await this.findUniqueByEmail(data.email);
 
         if (user) {
             throw new BadRequestException('O e-mail fornecido não está disponível.');
