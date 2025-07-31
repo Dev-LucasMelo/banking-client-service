@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
 import { updateClientDto } from './validation/updateClientDto';
+import { bankingParamDto } from './validation/paramDto';
 
 @Injectable()
 export class ClientService {
@@ -55,6 +56,38 @@ export class ClientService {
         }).catch((err) => {
             throw new BadRequestException("Ocorreu um erro inesperado!")
         })
+    }
+
+    async findUniqueByBankingData(data: bankingParamDto) {
+        const client = await this.repository.conta.findFirst({
+            select: {
+                cliente: {
+                    select: {
+                        id: true,
+                        nome_completo: true,
+                        email: true,
+                        Conta: {
+                            select: {
+                                id: true,
+                                numero_conta: true,
+                                agencia: true,
+                                saldo: true,
+                            }
+                        }
+                    }
+                }
+            },
+            where: {
+                numero_conta: data.bankingAccountNumber,
+                agencia: data.bankingAgencyNumber
+            },
+        })
+
+        if (!client) {
+            throw new NotFoundException("Cliente não encontrado !");
+        }
+
+        return client
     }
 
     async create(data: registerDto) {
