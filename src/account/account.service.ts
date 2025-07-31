@@ -62,4 +62,30 @@ export class AccountService {
 
         })
     }
+
+    async getAccountDetails(accountId: string) {
+        return await this.repository.conta.findUniqueOrThrow({
+            select: {
+                cliente: {
+                    select: {
+                        id: true,
+                        nome_completo: true,
+                        email: true,
+                        Conta: {
+                            select: {
+                                id: true,
+                                numero_conta: true,
+                                agencia: true,
+                                saldo: true,
+                            }
+                        }
+                    }
+                }
+            },
+            where:{
+                id: accountId
+            }
+        })
+
+    }
 }
