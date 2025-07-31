@@ -32,7 +32,7 @@ model Conta {
   id            String   @id @default(uuid()) @db.Uuid
   numero_conta  String   @unique @db.VarChar(20)
   agencia       String   @db.VarChar(10)
-  saldo         Decimal  @db.Decimal(15, 2)
+  saldo         Decimal  @db.Decimal(15, 2) @default(0) 
   tipo          String   @db.VarChar(20)
   status        String   @db.VarChar(20)
   criado_em     DateTime @default(now()) @map("criado_em")
