@@ -2,6 +2,7 @@ import { Controller, Param, Get, Patch, BadRequestException, Body } from '@nestj
 import { ClientService } from './client.service';
 import { updateClientDto } from './validation/updateClientDto';
 import { paramDto, bankingParamDto } from './validation/paramDto';
+import { uploadPictureDto } from './validation/uploadPictureDto';
 
 @Controller('client')
 export class ClientController {
@@ -26,5 +27,10 @@ export class ClientController {
     async updateById(@Param() params: paramDto, @Body() data: updateClientDto) {
         const { id } = params;
         return await this.service.updateById(id, data);
+    }
+
+    @Patch(':id/profile-picture')
+    async uploarPicture(@Param('id') id: any, @Body() data: uploadPictureDto) {
+        return await this.service.uploadPicture(id, data)
     }
 }

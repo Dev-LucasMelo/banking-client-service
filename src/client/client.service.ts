@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
 import { updateClientDto } from './validation/updateClientDto';
 import { bankingParamDto } from './validation/paramDto';
+import { uploadPictureDto } from './validation/uploadPictureDto';
 
 @Injectable()
 export class ClientService {
@@ -191,5 +192,20 @@ export class ClientService {
 
         })
 
+    }
+
+    async uploadPicture(id: string, data: uploadPictureDto) {
+        return await this.repository.cliente.update({
+            where: {
+                id: id
+            },
+            data: {
+                url_perfil: data.urlS3
+            }
+        }).then(() => {
+            return { mensagem: "Foto de perfil atualizada com sucesso!" }
+        }).catch(() => {
+            throw new BadRequestException('Houve um erro inesperado!');
+        })
     }
 }
